@@ -5,7 +5,7 @@ import router from '@/router'
 
 
 const state = {
-
+  shrink: false,
 }
 const getters = {}
 const actions = {

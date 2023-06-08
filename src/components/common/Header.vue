@@ -2,7 +2,7 @@
   <div class="header">
     <el-header>
       <div class="title">
-        <span>碳钢云管理系统</span>
+        <span>管理系统</span>
         <el-icon size="24px" @click="menuChange">
           <svg aria-hidden="true">
             <use :xlink:href="icon"></use>
@@ -29,7 +29,7 @@ import { removeToken } from '@/utils/setToken'
 
 let store = useStore()
 let icon = ref()
-icon.value = '#icon-fold'
+icon.value = '#icon-zhedie'
 const menuChange = () => {
   store.commit('changeShrink')
   if (store.state.shrink) {
@@ -37,17 +37,6 @@ const menuChange = () => {
   } else {
     icon.value = '#icon-fold'
   }
-}
-let name = ref('')
-const router = useRouter()
-store.dispatch('setUserInfoApi').then(() => {
-  if (!store.state.userInfo.userAccount) {
-    router.push({ path: '/login' })
-  }
-  name.value = store.state.userInfo.userNickname || store.state.userInfo.userAccount
-})
-const logout = () => {
-  removeToken('token')
 }
 </script>
 <style lang="less" scoped>

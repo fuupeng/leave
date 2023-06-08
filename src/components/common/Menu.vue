@@ -51,7 +51,7 @@ import { computed } from 'vue'
 const store = useStore()
 
 const router = useRouter()
-const menus = router.options.routes[3].children
+const menus = router.options.routes[1].children
 const activePath = computed(() => {
   return router.currentRoute.value.path
 })
