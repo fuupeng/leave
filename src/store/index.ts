@@ -12,6 +12,9 @@ const actions = {
 
 }
 const mutations = {
+  changeShrink(state: any) {
+    state.shrink = !state.shrink
+  },
 }
 
 export default createStore({

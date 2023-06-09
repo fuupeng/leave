@@ -1,41 +1,37 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-// import { createRouter, createWebHashHistory } from 'vue-router'
-
+import {
+  createRouter,
+  createWebHistory,
+  Router,
+  RouteRecordRaw,
+} from "vue-router";
+import student from "@/router/models/student";
+import teacher from "@/router/models/teacher";
+import instructor from "@/router/models/instructor";
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/login',
-    name: '注册',
-    component: () => import('@/view/base/login.vue')
+    path: "/",
+    redirect: "/student",
   },
+
   {
-    path:'/',
-    name:'主页',
-    component:()=>import('@/view/base/Home.vue'),
-    redirect:'/index',
-    children:[
-      {
-        path: '/index',
-        name: '首页',
-        meta: {
-          iconClass: '#icon-shouye',
-          notShow: true
-        },
-        component: () => import('@/view/index.vue')
-      },
-    ]
-  }
- ]
-const router = createRouter({
+    path: "/login",
+    name: "注册",
+    component: () => import("@/view/base/login.vue"),
+  },
+  student,
+  teacher,
+  instructor,
+];
+const router: Router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  // history: createWebHashHistory(),
-  routes
-})
+  routes,
+});
 // 声明全局的导航守卫
 router.beforeEach((to, from, next) => {
-  if (to.path === '/index') {
-    next()
+  if (to.path === "/index") {
+    next();
   } else {
-    next()
+    next();
   }
-})
-export default router
+});
+export default router;

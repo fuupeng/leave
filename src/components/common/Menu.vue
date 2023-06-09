@@ -6,38 +6,37 @@
         :default-active="activePath"
         active-text-color="#03bf8a"
         background-color="#f4f4f4"
-        class="el-menu-vertical-demo"
+        class=""
         default-active="2"
         router
         text-color="#333"
       >
-        <template v-for="item in menus" :key="item.path">
+        <template v-for="(item, index) in menus" :key="item.path">
           <el-menu-item v-if="!item.children" :index="item.path" class="retraction">
             <el-icon>
               <svg aria-hidden="true" class="icon menuIcon">
                 <use :xlink:href="item.meta.iconClass"></use>
               </svg>
             </el-icon>
-            <!--<span>{{ item.name }}</span>-->
-            <template #title>{{ item.name }}</template>
+            <template #title>{{ item.meta.name }}</template>
           </el-menu-item>
-        </template>
-        <template v-for="(item, index) in menus" :key="index">
-          <el-sub-menu v-if="item.children" :key="index" :index="index + ''">
+          <el-sub-menu v-if="item.children" :key="item.path" :index="item.path">
             <template #title>
               <el-icon>
-                <!--                <i :class='"iconfont "+item.iconClass'></i>-->
                 <svg aria-hidden="true" class="icon menuIcon">
                   <use :xlink:href="item.meta.iconClass"></use>
                 </svg>
               </el-icon>
-              <span>{{ item.name }}</span>
+              <span>{{ item.meta.name }}</span>
             </template>
-            <el-menu-item v-for="(child, index) in item.children" :key="index" :index="child.path">
+            <template v-for="(child, index) in item.children" :key="child.path">
+            <el-menu-item  :index="child.path">
               <i :class="child.iconClass"></i>
-              {{ child.name }}
+              {{ child.meta.name }}
             </el-menu-item>
+            </template>
           </el-sub-menu>
+
         </template>
       </el-menu>
     </el-aside>
@@ -51,7 +50,8 @@ import { computed } from 'vue'
 const store = useStore()
 
 const router = useRouter()
-const menus = router.options.routes[1].children
+console.log(router.options.routes)
+const menus = router.options.routes[2].children
 const activePath = computed(() => {
   return router.currentRoute.value.path
 })

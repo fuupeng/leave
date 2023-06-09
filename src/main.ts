@@ -5,7 +5,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import 'http://at.alicdn.com/t/c/font_4110331_laqhyjo2n4.js'
+import 'http://at.alicdn.com/t/c/font_4110331_xjhzpb6f1jl.js'
 const app:App<Element> = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)

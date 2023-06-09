@@ -29,7 +29,7 @@ import { removeToken } from '@/utils/setToken'
 
 let store = useStore()
 let icon = ref()
-icon.value = '#icon-zhedie'
+icon.value = '#icon-fold'
 const menuChange = () => {
   store.commit('changeShrink')
   if (store.state.shrink) {
