@@ -1,45 +1,71 @@
-import { RouteRecordRaw } from "vue-router";
+import { RouteRecordRaw } from 'vue-router'
 
 const teacher: RouteRecordRaw = {
-  path: "/teacher",
+  path: '/teacher',
   meta: {
-    name: "教师端",
+    name: '教师端'
   },
-  component: () => import("@/view/base/Home.vue"),
-  redirect: "/teacher/info",
+  component: () => import('@/view/base/Home.vue'),
+  redirect: '/teacher/info',
   children: [
     {
-      path: "/teacher/info",
+      path: '/teacher/info',
       meta: {
-        iconClass: "#icon-geren",
-        name: "个人信息",
+        iconClass: '#icon-geren',
+        name: '个人信息'
       },
-      component: () => import("@/view/teacher/Info.vue"),
+      component: () => import('@/view/teacher/Info.vue')
     },
     {
-      path: "/teacher/course",
+      path: '/teacher/leave/course',
       meta: {
-        iconClass: "#icon-qingjia",
-        name: "课程请假",
+        iconClass: '#icon-qingjia',
+        name: '课程请假'
       },
-      redirect: "/teacher/teacher/application",
+      redirect: '/teacher/leave/course/applying',
       children: [
         {
-          path: "/teacher/teacher/applying",
-          component: () => import("@/view/student/course/Applying.vue"),
+          path: '/teacher/leave/course/applying',
+          component: () => import('@/view/teacher/leave/course/Applying.vue'),
           meta: {
-            name: "申请中",
-          },
+            name: '申请中'
+          }
         },
         {
-          path: "/teacher/teacher/history",
-          component: () => import("@/view/student/course/History.vue"),
+          path: '/teacher/leave/course/history',
+          component: () => import('@/view/teacher/leave/course/History.vue'),
           meta: {
-            name: "请假历史",
-          },
-        },
-      ],
+            name: '请假历史'
+          }
+        }
+      ]
     },
-  ],
-};
-export default teacher;
+    {
+      path: '/teacher/course',
+      redirect: '/teacher/course/list',
+      meta: {
+        iconClass: '',
+        name: '教师课程'
+      },
+      children: [
+        {
+          path: '/teacher/course/list',
+          // todo
+          component: () => import('@/view/teacher/course/list.vue'),
+          meta: {
+            name: '课程列表'
+          }
+        },
+        {
+          path: '/teacher/course/release',
+          // todo
+          component: () => import('@/view/teacher/course/add.vue'),
+          meta: {
+            name: '课程发布'
+          }
+        }
+      ]
+    }
+  ]
+}
+export default teacher

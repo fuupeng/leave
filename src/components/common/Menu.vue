@@ -12,7 +12,11 @@
         text-color="#333"
       >
         <template v-for="(item, index) in menus" :key="item.path">
-          <el-menu-item v-if="!item.children" :index="item.path" class="retraction">
+          <el-menu-item
+            v-if="!item.children"
+            :index="item.path"
+            class="retraction"
+          >
             <el-icon>
               <svg aria-hidden="true" class="icon menuIcon">
                 <use :xlink:href="item.meta.iconClass"></use>
@@ -30,34 +34,41 @@
               <span>{{ item.meta.name }}</span>
             </template>
             <template v-for="(child, index) in item.children" :key="child.path">
-            <el-menu-item  :index="child.path">
-              <i :class="child.iconClass"></i>
-              {{ child.meta.name }}
-            </el-menu-item>
+              <el-menu-item :index="child.path">
+                <i :class="child.iconClass"></i>
+                {{ child.meta.name }}
+              </el-menu-item>
             </template>
           </el-sub-menu>
-
         </template>
       </el-menu>
     </el-aside>
   </div>
 </template>
 <script lang="ts" setup>
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { RouteRecordRaw, useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { computed } from "vue";
 
-const store = useStore()
+const store = useStore();
 
-const router = useRouter()
-console.log(router.options.routes)
-const menus = router.options.routes[2].children
+const router = useRouter();
+const menus: any = ref();
 const activePath = computed(() => {
-  return router.currentRoute.value.path
-})
+  return router.currentRoute.value.path;
+});
+const identity = localStorage.getItem("identity");
+if (identity === "student") {
+  menus.value = router.options.routes[2].children;
+} else if (identity === "teacher") {
+  menus.value = router.options.routes[3].children;
+} else {
+  menus.value = router.options.routes[4].children;
+}
+
 const isCollapse = computed(() => {
-  return store.state.shrink
-})
+  return store.state.shrink;
+});
 </script>
 <style lang="less" scoped>
 //设置了默认左边框为白色

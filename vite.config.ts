@@ -64,8 +64,7 @@ export default defineConfig({
     // 设置代理
     proxy: {
       '/api': {
-        // target: 'http://10.101.20.38:8081/', //你要跨域访问的网址
-        target: 'http://121.41.51.145:8077/apis',
+        target: 'http://10.101.176.25:8080', //你要跨域访问的网址
         changeOrigin: true, // 允许跨域
         rewrite: (path: string) => path.replace(/^\/api/, '') // 重写路径把路径变成空字符
       }

@@ -1,76 +1,81 @@
 <template>
-  <div id="login-box">
-    <h1>Login</h1>
-    <div class="input-box">
-      <i class="iconfont">&#xe609;</i>
-
-      <input type="text" placeholder="UserName" />
+  <div class="login">
+    <h1>欢迎登录</h1>
+    <el-form ref="form1" :model="form" label-width="80px" class="form">
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
+      </el-form-item>
+      <el-form-item label="密 码" prop="password">
+        <el-input
+          type="password"
+          v-model="form.password"
+          placeholder="请输入密码"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="身 份" prop="identity">
+        <el-radio-group v-model="form.identity">
+          <el-radio-button label="student">学生</el-radio-button>
+          <el-radio-button label="teacher">任课教师</el-radio-button>
+          <el-radio-button label="instructor">辅导员</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+    </el-form>
+    <div class="btns">
+      <el-button type="primary" @click="handleSubmit">登录</el-button>
+      <el-button @click="handleReset">重置</el-button>
     </div>
-    <div class="input-box">
-      <i class="iconfont">&#xe605;</i>
-      <input type="password" placeholder="UserPassword" />
-    </div>
-    <div class="input-box">
-      <el-radio-group v-model="identity">
-        <el-radio label="1" size="large">学生</el-radio>
-        <el-radio label="2" size="large">辅导员</el-radio>
-        <el-radio label="3" size="large">任课教师</el-radio>
-      </el-radio-group>
-    </div>
-    <button>Sign in</button>
   </div>
 </template>
 <script lang="ts" setup>
-const identity = ref("1");
-</script>
-<style scoped lang="less">
-body {
-  // background-image: url(../img/桥.jpg);
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position: 0px -50px;
+import { LoginApi } from "@/api/login";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
+const router = useRouter();
+const store = useStore();
+const form = ref({
+  username: "",
+  password: "",
+  identity: "student",
+});
+
+const handleSubmit = async () => {
+  const { data: res } = await LoginApi(form.value);
+  if (res.code === 200) {
+    localStorage.setItem("identity", form.value.identity);
+    await router.push({ path: `/${form.value.identity}` });
+  }
+};
+
+function handleReset(): void {
+  form.value = { username: "", password: "", identity: "student" };
 }
-#login-box {
-  background-color: #00000068;
-  border-radius: 13px;
-  text-align: center;
-  margin: 0px auto;
-  margin-top: 80px;
-  width: 350px;
-  height: 400px;
+</script>
+
+<style lang="less" scoped>
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
   h1 {
-    padding-top: 60px;
-    color: #ffffff;
+    margin-bottom: 40px;
+    font-size: 28px;
+    font-weight: 600;
   }
-  .input-box {
-    margin-top: 30px;
-  }
+}
 
-  .input-box input {
-    border: none;
-    background: none;
-    border-bottom: #ffffff 2px solid;
-    padding: 5px 10px;
-    outline: none;
-    color: #ffffff;
-  }
+.form {
+  width: 360px;
+}
+
+.btns {
+  margin-top: 24px;
+
   button {
-    line-height: 30px;
-    margin-top: 30px;
-    width: 130px;
-    height: 30px;
-    border-radius: 13px;
-    outline: none;
-    border: none;
-    background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
-    color: #ffffff;
-  }
-
-  button:hover {
-    background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
-  }
-  .input-box i {
-    color: #ffffff;
+    margin-right: 12px;
   }
 }
 </style>
