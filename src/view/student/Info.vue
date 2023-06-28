@@ -33,7 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
 import { GetInfoApi } from '@/api/student/info'
 
 const info = ref({
@@ -58,10 +57,16 @@ const onSubmit = () => {
 </script>
 <style lang="less">
 .info {
-  width: 800px;
+  width: 1200px;
   margin: 0 auto;
   .el-card {
     padding: 30px;
+    width: 1200px;
+    margin: 0 auto;
+    .el-form {
+      width: 800px;
+      margin: 0 auto;
+    }
     .btn {
       display: flex !important;
       justify-content: center;

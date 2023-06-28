@@ -3,10 +3,16 @@ import request from '@/utils/request'
 export const GetInfoApi = () => {
   return request({
     url: `/tea/info`,
-    method: 'POST'
+    method: 'GET'
   })
 }
-
+export const UpdateApi = (data: any) => {
+  return request({
+    url: `/tea/updateInfo`,
+    method: 'PUT',
+    data
+  })
+}
 // 查询请假信息
 export const GetLeaveList = (result: any) => {
   return request({

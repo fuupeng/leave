@@ -3,7 +3,7 @@ import { getToken, setToken } from '@/utils/setToken.js'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
 
-const apis = {
+export const apis = {
   production: 'http://121.41.51.145:8077/apis', // 线上 (生成环境)
   development: 'http://localhost:8089/api', // 本地 (开发环境)
   accessHomeData: 'http://www.xmyxapp.com' // 其他api
@@ -36,7 +36,7 @@ request.interceptors.response.use(
     if (data && data.token) {
       setToken('token', data.token)
     }
-    if (response.data.msg === 'NOT_USE') {
+    if (msg === 'NOT_LOGIN') {
       console.log(router)
       router.push({ path: '/login' }).then(() => {
         ElMessage({ message: '请重新登录', type: 'warning' })

@@ -23,7 +23,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { GetCourseLeaveListApi } from '@/api/student/course'
+import { GetCourseLeaveListApi } from '@/api/student/leave'
 import { TableTitle } from '@/interface/table'
 import { GetLeaveList, IsAgree } from '@/api/teacher/info'
 

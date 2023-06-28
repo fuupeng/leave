@@ -1,11 +1,17 @@
 import request from '@/utils/request'
 // 审核中
-export const GetLeaveList = (result: any) => {
+export const GetLeaveList = (status: any) => {
   return request({
-    url: 'inst/allinReview',
-    method: 'POST',
-    data: {
-      resultTea: result
-    }
+    url: `/inst/lessonInReview/${status}`,
+    method: 'GET'
+  })
+}
+
+// 审核
+export const ReviewLeaveApi = (rid: any, resultInst: any) => {
+  return request({
+    url: `/inst/examineInReview/`,
+    method: 'PUT',
+    data: { rid, resultInst }
   })
 }

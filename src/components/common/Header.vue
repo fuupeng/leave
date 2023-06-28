@@ -22,11 +22,31 @@
               {{ name }}
             </template>
             <el-menu-item :index="'/' + identity + '/info'">个人信息</el-menu-item>
+            <el-menu-item @click="clickCenter">修改头像</el-menu-item>
             <el-menu-item @click="logout" index="/login">退出登录</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </div>
     </el-header>
+    <el-dialog v-model="centerDialogVisible" title="头像修改" width="30%" center>
+      <div style="text-align: center">
+        <el-upload
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </el-upload>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="centerDialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
@@ -64,6 +84,13 @@ const GetInfo = async () => {
   }
 }
 GetInfo()
+
+// 修改头像
+const centerDialogVisible = ref(false)
+const clickCenter = () => {
+  centerDialogVisible.value = true
+}
+const imageUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
 </script>
 <style lang="less" scoped>
 .header {

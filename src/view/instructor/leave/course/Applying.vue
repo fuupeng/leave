@@ -5,15 +5,15 @@
       <template v-for="(item, index) in tableTitle" :key="item.prop">
         <el-table-column v-if="item.label == '辅导员结果'" :label="item.label" :prop="item.prop" align="center">
           <template #default="scope">
-            <el-tag v-if="scope.row.result_inst === '通过'" effect="dark" type="success">通过</el-tag>
-            <el-tag v-else-if="scope.row.result_inst === '未通过'" effect="dark" type="danger">未通过</el-tag>
+            <el-tag v-if="scope.row.resultInst === '已通过'" effect="dark" type="success">通过</el-tag>
+            <el-tag v-else-if="scope.row.resultInst === '未通过'" effect="dark" type="danger">未通过</el-tag>
             <el-tag v-else effect="dark" type="warning">审核中</el-tag>
           </template>
         </el-table-column>
         <el-table-column v-else-if="item.label == '任课教师结果'" :label="item.label" :prop="item.prop" align="center">
           <template #default="scope">
-            <el-tag v-if="scope.row.result_tea === '通过'" effect="dark" type="success">通过</el-tag>
-            <el-tag v-else-if="scope.row.result_tea === '未通过'" effect="dark" type="danger">未通过</el-tag>
+            <el-tag v-if="scope.row.resultTea === '已通过'" effect="dark" type="success">通过</el-tag>
+            <el-tag v-else-if="scope.row.resultTea === '未通过'" effect="dark" type="danger">未通过</el-tag>
             <el-tag v-else effect="dark" type="warning">审核中</el-tag>
           </template>
         </el-table-column>
@@ -26,7 +26,7 @@
               <el-button link size="small" type="primary">同意</el-button>
             </template>
           </el-popconfirm>
-          <el-popconfirm title="确认拒绝吗？" @confirm="agree(disagree(scope.row.rid))">
+          <el-popconfirm title="确认拒绝吗？" @confirm="disagree(scope.row.rid)">
             <template #reference>
               <el-button link size="small" type="danger">拒绝</el-button>
             </template>
@@ -38,8 +38,9 @@
 </template>
 <script lang="ts" setup>
 import { TableTitle } from '@/interface/table'
-import { GetLeaveList } from '@/api/instructor/course'
+import { GetLeaveList, ReviewLeaveApi } from '@/api/instructor/course'
 import { IsAgree } from '@/api/teacher/info'
+import { DayUtils } from '@/utils/DayUtils'
 
 const tableTitle: TableTitle[] = [
   {
@@ -56,25 +57,27 @@ const tableTitle: TableTitle[] = [
   },
   {
     label: '辅导员结果',
-    prop: 'result_inst'
+    prop: 'resultInst'
   },
   {
     label: '任课教师结果',
-    prop: 'result_tea'
+    prop: 'resultTea'
   }
 ]
 const tableData = ref()
 const GetList = async () => {
-  const { data: res } = await GetLeaveList('审核中')
+  const { data: res } = await GetLeaveList(0)
   if (res.code === 200) {
-    tableData.value = res.data
+    DayUtils.date = res.data
+    DayUtils.accurateToSeconds('date')
+    tableData.value = DayUtils.date
   }
 }
 GetList()
 
 // 同意
 const agree = async (rid: any) => {
-  const { data: res } = await IsAgree(rid, '通过')
+  const { data: res } = await ReviewLeaveApi(rid, '已通过')
   if (res.code === 200) {
     await GetList()
     ElMessage({
@@ -84,7 +87,7 @@ const agree = async (rid: any) => {
   }
 }
 const disagree = async (rid: any) => {
-  const { data: res } = await IsAgree(rid, '不通过')
+  const { data: res } = await ReviewLeaveApi(rid, '未通过')
   if (res.code === 200) {
     await GetList()
     ElMessage({

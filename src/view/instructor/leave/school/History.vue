@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import { TableTitle } from '@/interface/table'
 import { GetSchoolLeave, his, update } from '@/api/instructor/school'
+import { DayUtils } from '@/utils/DayUtils'
 
 const tableTitle: TableTitle[] = [
   {
@@ -54,11 +55,8 @@ const tableTitle: TableTitle[] = [
     label: '学生姓名',
     prop: 'uname'
   },
-  {
-    label: '手机号码',
-    prop: 'phone'
-  },
-  { label: '地址', prop: 'address' },
+
+  { label: '地址', prop: 'destination' },
   {
     label: '状态',
     prop: 'result'
@@ -68,23 +66,12 @@ const tableData = ref()
 const GetList = async () => {
   const { data: res } = await his()
   if (res.code === 200) {
-    tableData.value = res.data
+    DayUtils.date = res.data
+    DayUtils.accurateToDay('date').accurateToDay('starttime').accurateToDay('endtime')
+    tableData.value = DayUtils.date
   }
 }
 GetList()
-
-const agree = async (lid: any) => {
-  const { data: res } = await update(lid, '通过')
-  if ((res.code = 200)) {
-    await GetList()
-  }
-}
-const disagree = async (lid: any) => {
-  const { data: res } = await update(lid, '未通过')
-  if ((res.code = 200)) {
-    await GetList()
-  }
-}
 </script>
 <style lang="less">
 .container {

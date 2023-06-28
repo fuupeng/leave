@@ -44,7 +44,7 @@ const teacher: RouteRecordRaw = {
       path: '/teacher/course',
       redirect: '/teacher/course/list',
       meta: {
-        iconClass: '',
+        iconClass: 'icon-kecheng',
         name: '教师课程'
       },
       children: [

@@ -3,16 +3,16 @@
   <div class="container">
     <el-card>
       <el-form inline :model="leaveData" label-position="left" label-width="150px">
-        <el-form-item label="请假日期">
+        <el-form-item label="请假周">
           <el-select v-model="leaveData.nweek" placeholder="Select">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.label" />
           </el-select>
         </el-form-item>
         <br />
         <el-form-item label="请假课程">
-          <el-select v-model="leaveData.cuid" placeholder="请选择课程">
+          <el-select v-model="leaveData.ccuid" placeholder="请选择课程">
             <template v-for="item in course">
-              <el-option :label="item.cuname" :value="item.cuid" />
+              <el-option :label="item.cuname" :value="item.ccuid" />
             </template>
           </el-select>
         </el-form-item>
@@ -28,20 +28,19 @@
 import { ref } from 'vue'
 import { dayjs } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { CourseLeaveApi, GetCourseNameApi } from '@/api/student/course'
+import { CourseLeaveApi, GetCourseNameApi } from '@/api/student/leave'
 const router = useRouter()
 
 const leaveData = ref({
-  cuid: '',
+  ccuid: '',
   nweek: ''
 })
 
 // 获取辅导员课程
-const course = ref()
+const course = ref([] as Array<{ cuname: string; ccuid: string }>)
 const GetCourseName = async () => {
   const { data: res } = await GetCourseNameApi()
   course.value = res.data
-  console.log(res.data)
 }
 GetCourseName()
 
@@ -51,6 +50,7 @@ for (let i = 0; i < 17; i++) {
 }
 // 提交
 const onSubmit = async () => {
+  console.log(leaveData.value)
   const { data: res } = await CourseLeaveApi(leaveData.value)
   if (res.code === 200) {
     ElMessage({
@@ -58,7 +58,10 @@ const onSubmit = async () => {
       message: '提交成功',
       type: 'success'
     })
-    router.push({ path: '/student/leave/applying' })
+    leaveData.value = {
+      ccuid: '',
+      nweek: ''
+    }
   } else {
     ElMessage({
       showClose: true,

@@ -1,7 +1,7 @@
 <template>
   申请中
   <div class="container">
-    <el-table :data="tableData" border stripe style="width: 100%">
+    <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
       <el-table-column type="index" width="50" align="center" />
       <template v-for="(item, index) in tableTitle" :key="item.prop">
         <el-table-column
@@ -64,9 +64,10 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { GetAttendanceApi, GetAttenDetailsApi } from '@/api/student/course'
+import { GetAttendanceApi, GetAttenDetailsApi } from '@/api/student/leave'
 import { TableTitle } from '@/interface/table'
-
+import { accurateToSeconds } from '@/utils/day'
+const loading = ref(false)
 const tableTitle: TableTitle[] = [
   {
     label: '课程名称',
@@ -83,10 +84,12 @@ const tableTitle: TableTitle[] = [
 ]
 const tableData = ref()
 const GetList = async () => {
+  loading.value = true
   const { data: res } = await GetAttendanceApi()
   if (res.code === 200) {
     tableData.value = res.data
   }
+  loading.value = false
 }
 GetList()
 
@@ -106,7 +109,8 @@ const drawer = ref(false)
 const details = async (uid: number) => {
   drawer.value = true
   const { data: res } = await GetAttenDetailsApi(uid)
-  detailTableData.value = res.data
+  const data = accurateToSeconds(res.data, 'time')
+  detailTableData.value = data
 }
 </script>
 <style lang="less">

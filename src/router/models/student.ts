@@ -90,24 +90,22 @@ const student: RouteRecordRaw = {
       path: '/student/leave',
       redirect: '/student/course/list',
       meta: {
-        iconClass: '',
+        iconClass: '#icon-kecheng',
         name: '学生课程'
       },
       children: [
         {
-          path: '/student/course/list',
-          // todo
-          component: () => import('@/view/student/course/list.vue'),
+          path: '/student/course/selection',
+          component: () => import('@/view/student/course/Selection.vue'),
           meta: {
-            name: '课程列表'
+            name: '学生选课'
           }
         },
         {
-          path: '/student/course/selection',
-          // todo
-          component: () => import('@/view/student/course/selection.vue'),
+          path: '/student/course/list',
+          component: () => import('@/view/student/course/List.vue'),
           meta: {
-            name: '学生选课'
+            name: '课程列表'
           }
         }
       ]
@@ -116,7 +114,7 @@ const student: RouteRecordRaw = {
       path: '/student/classroom',
       meta: {
         name: '教室申请',
-        iconClass: ''
+        iconClass: '#icon-jiaoshi'
       },
       redirect: '/student/classroom/Application',
       children: [
@@ -147,7 +145,7 @@ const student: RouteRecordRaw = {
       path: '/student/exemption',
       meta: {
         name: '免听免修',
-        iconClass: ''
+        iconClass: '#icon-mianxiumiankao'
       },
       redirect: '/student/exemption/Application',
       children: [
@@ -168,6 +166,37 @@ const student: RouteRecordRaw = {
         {
           path: '/student/exemption/history',
           component: () => import('@/view/student/exemption/History.vue'),
+          meta: {
+            name: '申请历史'
+          }
+        }
+      ]
+    },
+    {
+      path: '/student/second',
+      meta: {
+        name: '第二课堂',
+        iconClass: '#icon-mianxiumiankao'
+      },
+      redirect: '/student/second/Application',
+      children: [
+        {
+          path: '/student/second/Application',
+          component: () => import('@/view/student/second/application.vue'),
+          meta: {
+            name: '学分申请'
+          }
+        },
+        {
+          path: '/student/second/applying',
+          component: () => import('@/view/student/second/Applying.vue'),
+          meta: {
+            name: '申请中'
+          }
+        },
+        {
+          path: '/student/second/history',
+          component: () => import('@/view/student/second/History.vue'),
           meta: {
             name: '申请历史'
           }

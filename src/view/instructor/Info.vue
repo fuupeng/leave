@@ -3,16 +3,19 @@
     <el-card>
       <el-form inline :model="info" label-position="left" label-width="100px">
         <el-form-item label="姓名">
-          <el-input v-model="info.tname" placeholder="请填写姓名" />
+          <el-input v-model="info.tname" placeholder="请填写姓名" disabled />
         </el-form-item>
         <el-form-item label="职称">
-          <el-input v-model="info.title" placeholder="请填写职称" />
+          <el-input v-model="info.title" placeholder="请填写职称" disabled />
         </el-form-item>
-        <el-form-item label="班级">
-          <el-input v-model="info.cla" placeholder="请填写班级" />
+        <el-form-item label="级别">
+          <el-input v-model="info.level" placeholder="请填写职称" disabled />
+        </el-form-item>
+        <el-form-item label="学院">
+          <el-input v-model="info.college" placeholder="请填写学院" />
         </el-form-item>
         <el-form-item label="性别">
-          <el-input v-model="info.gender" placeholder="请填写性别" />
+          <el-input v-model="info.gender" placeholder="请填写性别" disabled />
         </el-form-item>
         <el-form-item label="年龄">
           <el-input v-model="info.age" placeholder="请填写年龄" />
@@ -37,14 +40,15 @@
 
 <script lang="ts" setup>
 import { reactive } from 'vue'
-import { GetInfoApi } from '@/api/teacher/info'
+import { GetInfoApi, UpdateApi } from '@/api/teacher/info'
 
 const info = ref({
   tname: '',
   title: '',
-  cla: '',
+  college: '',
   gender: '',
   age: '',
+  level: '',
   phone: '',
   email: '',
   address: ''
@@ -56,8 +60,12 @@ const GetInfo = async () => {
   localStorage.setItem('info', JSON.stringify(res.data))
 }
 GetInfo()
-const onSubmit = () => {
-  console.log('submit!')
+const onSubmit = async () => {
+  const { data: res } = await UpdateApi(info.value)
+  console.log(res)
+  if (res.code === 200) {
+    ElMessage.success('更新成功！')
+  }
 }
 </script>
 <style lang="less">

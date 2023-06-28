@@ -63,6 +63,78 @@ const instructor: RouteRecordRaw = {
           }
         }
       ]
+    },
+    {
+      path: '/instructor/classroom',
+      meta: {
+        name: '教室申请',
+        iconClass: '#icon-jiaoshi'
+      },
+      redirect: '/instructor/classroom/Application',
+      children: [
+        {
+          path: '/instructor/classroom/applying',
+          component: () => import('@/view/instructor/classroom/Applying.vue'),
+          meta: {
+            name: '申请中'
+          }
+        },
+        {
+          path: '/instructor/classroom/history',
+          component: () => import('@/view/instructor/classroom/History.vue'),
+          meta: {
+            name: '申请历史'
+          }
+        }
+      ]
+    },
+    {
+      path: '/instructor/exemption',
+      meta: {
+        name: '免听免修',
+        iconClass: '#icon-mianxiumiankao'
+      },
+      redirect: '/instructor/exemption/Application',
+      children: [
+        {
+          path: '/instructor/exemption/applying',
+          component: () => import('@/view/instructor/exemption/Applying.vue'),
+          meta: {
+            name: '申请中'
+          }
+        },
+        {
+          path: '/instructor/exemption/history',
+          component: () => import('@/view/instructor/exemption/History.vue'),
+          meta: {
+            name: '申请历史'
+          }
+        }
+      ]
+    },
+    {
+      path: '/instructor/second',
+      meta: {
+        name: '第二课堂',
+        iconClass: '#icon-mianxiumiankao'
+      },
+      redirect: '/instructor/second/Application',
+      children: [
+        {
+          path: '/instructor/second/applying',
+          component: () => import('@/view/instructor/second/Applying.vue'),
+          meta: {
+            name: '申请中'
+          }
+        },
+        {
+          path: '/instructor/second/history',
+          component: () => import('@/view/instructor/second/History.vue'),
+          meta: {
+            name: '申请历史'
+          }
+        }
+      ]
     }
   ]
 }

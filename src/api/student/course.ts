@@ -1,50 +1,41 @@
 import request from '@/utils/request'
 
-// 获取课程请假记录
-export const GetListApi = (state: number) => {
+/**
+ * 获取课程列表
+ * @constructor
+ */
+export const GetCourseListApi = () => {
   return request({
-    url: `stu/record/${state}`,
+    url: `/stu/all/course`,
     method: 'GET'
   })
 }
 
-// 获取出勤列表
-export const GetAttendanceApi = () => {
+/**
+ * 选课
+ * @param ccuid
+ * @constructor
+ */
+export const SelectionApi = (ccuid: any) => {
   return request({
-    url: 'stu/attend',
+    url: `/stu/select/course/${ccuid}`,
+    method: 'POST'
+  })
+}
+/**
+ *  获取选课结果
+ * @constructor
+ */
+export const SelectionedListApi = () => {
+  return request({
+    url: `/stu/allCourse`,
     method: 'GET'
   })
 }
 
-// 获取出勤详情
-export const GetAttenDetailsApi = (cuid: number) => {
+export const DeselectionsApi = (ccuid: any) => {
   return request({
-    url: `/stu/detail/${cuid}`,
-    method: 'GET'
-  })
-}
-
-// 课程请假
-export const CourseLeaveApi = (data: any) => {
-  return request({
-    url: `stu/courseApply`,
-    method: 'POST',
-    data
-  })
-}
-
-// 获取课程名称
-export const GetCourseNameApi = () => {
-  return request({
-    url: 'stu/allCourse',
-    method: 'GET'
-  })
-}
-
-// 获取课程请假记录
-export const GetCourseLeaveListApi = (state: any) => {
-  return request({
-    url: `stu/courseRecord/${state}`,
-    method: 'GET'
+    url: `/stu/withdraw/${ccuid}`,
+    method: 'DELETE'
   })
 }

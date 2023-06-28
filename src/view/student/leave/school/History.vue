@@ -1,7 +1,7 @@
 <template>
   历史记录
   <div class="container">
-    <el-table :data="tableData" border stripe style="width: 100%">
+    <el-table :data="tableData" border stripe style="width: 100%" v-loading="loading">
       <el-table-column type="index" width="50" align="center" />
       <template v-for="(item, index) in tableTitle" :key="item.prop">
         <el-table-column
@@ -29,9 +29,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { GetListApi } from '@/api/student/course'
+import { GetListApi } from '@/api/student/leave'
 import { TableTitle } from '@/interface/table'
-
+const loading = ref(false)
 const tableTitle: TableTitle[] = [
   {
     label: '申请时间',
@@ -61,9 +61,11 @@ const tableTitle: TableTitle[] = [
 ]
 const tableData = ref()
 const GetList = async () => {
+  loading.value = true
   const { data: res } = await GetListApi(1)
   if (res.code === 200) {
     tableData.value = res.data
+    loading.value = false
   }
 }
 GetList()

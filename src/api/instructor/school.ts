@@ -4,7 +4,7 @@ import request from '@/utils/request'
 export const GetSchoolLeave = () => {
   return request({
     url: `/inst/campusInReview`,
-    method: 'POST'
+    method: 'GET'
   })
 }
 
@@ -23,7 +23,7 @@ export const update = (lid: any, result: any) => {
 // suoy
 export const his = () => {
   return request({
-    url: '/inst/LeaveHistory',
-    method: 'POST'
+    url: '/inst/leaveHistory',
+    method: 'GET'
   })
 }

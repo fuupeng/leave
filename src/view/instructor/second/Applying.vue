@@ -10,21 +10,21 @@
             <el-tag v-else effect="dark" type="warning">审核中</el-tag>
           </template>
         </el-table-column>
-        <el-table-column v-else :prop="item.prop" :label="item.label" align="center" />
+        <el-table-column v-else :prop="item.prop" :label="item.label" align="center" :width="item.width" />
       </template>
-      <el-table-column align="center" fixed="right" label="操作" width="120">
+      <el-table-column align="center" label="证明材料" width="120">
         <template #default="scope">
-          <el-button @click="showProof(scope.row.proof)" link size="small" type="success">查看证明材料</el-button>
+          <el-button @click="showProof(scope.row.proof)" link size="small" type="primary">查看证明材料</el-button>
         </template>
       </el-table-column>
       <el-table-column align="center" fixed="right" label="操作">
         <template #default="scope">
-          <el-popconfirm title="确认同意吗？" @confirm="agree(scope.row.mid, '已通过')">
+          <el-popconfirm title="确认同意吗？" @confirm="agree(scope.row.rid, '已通过')">
             <template #reference>
               <el-button link size="small" type="primary">同意</el-button>
             </template>
           </el-popconfirm>
-          <el-popconfirm title="确认拒绝吗？" @confirm="agree(scope.row.mid, '未通过')">
+          <el-popconfirm title="确认拒绝吗？" @confirm="agree(scope.row.rid, '未通过')">
             <template #reference>
               <el-button link size="small" type="danger">拒绝</el-button>
             </template>
@@ -42,23 +42,43 @@
 </template>
 <script setup lang="ts">
 import { TableTitle } from '@/interface/table'
-import { ApplyingApi } from '@/api/student/exemption'
-import { ExemptionAuditingAPi, GetExemptionListApi } from '@/api/instructor/exemption'
+
+import { DayUtils } from '@/utils/DayUtils'
+import { GetSecondList, SecondAgreeApi } from '@/api/instructor/second'
+
 const dialogTableVisible = ref(false)
 const loading = ref(false)
 // 表头
 const tableTitle: TableTitle[] = [
   {
+    label: '申请时间',
+    prop: 'time',
+    width: '200'
+  },
+  {
     label: '学生姓名',
     prop: 'uname'
   },
   {
-    label: '课程名称',
-    prop: 'cuname'
+    label: '实践模块',
+    prop: 'type'
   },
   {
-    label: '原因',
-    prop: 'reason'
+    label: '活动名称',
+    prop: 'name'
+  },
+  {
+    label: '奖项名称',
+    prop: 'reward'
+  },
+
+  {
+    label: '奖项等级',
+    prop: 'reward'
+  },
+  {
+    label: '申请分值',
+    prop: 'grade'
   },
   {
     label: '状态',
@@ -69,8 +89,10 @@ const tableTitle: TableTitle[] = [
 const tableData = ref()
 const Applying = async () => {
   loading.value = true
-  const { data: res } = await GetExemptionListApi()
-  tableData.value = res.data
+  const { data: res } = await GetSecondList(0)
+  DayUtils.date = res.data
+  tableData.value = DayUtils.accurateToSeconds('time').date
+  console.log(res.data)
   loading.value = false
 }
 Applying()
@@ -90,9 +112,9 @@ const showProof = async (proof: any) => {
   }
 }
 
-//操作
-const agree = async (mid: any, result: string) => {
-  const { data: res } = await ExemptionAuditingAPi({ mid, result })
+// 同意
+const agree = async (rid: any, status: string) => {
+  const { data: res } = await SecondAgreeApi({ rid, result: status })
   if (res.code === 200) {
     await Applying()
     ElMessage.success('操作成功')
