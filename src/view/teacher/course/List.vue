@@ -11,10 +11,10 @@
             width="220"
             confirm-button-text="确认"
             cancel-button-text="取消"
-            title="确定退选此课吗"
+            title="确定取消此课吗"
           >
             <template #reference>
-              <el-button link size="small" type="danger">点击退选</el-button>
+              <el-button link size="small" type="danger">点击取消</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -23,8 +23,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { DeselectionsApi, GetCourseListApi, SelectionApi, SelectionedListApi } from '@/api/student/course'
 import { TableTitle } from '@/interface/table'
+import { GetCourseListApi } from '@/api/teacher/course'
 const loading = ref(false)
 // 表头
 const tableTitle: TableTitle[] = [
@@ -61,20 +61,20 @@ const tableTitle: TableTitle[] = [
 const tableData = ref()
 const GetCourseList = async () => {
   loading.value = true
-  const { data: res } = await SelectionedListApi()
+  const { data: res } = await GetCourseListApi()
   tableData.value = res.data
   loading.value = false
 }
 GetCourseList()
 
 // 退选
-const deselect = async (ccuid: any) => {
+/*const deselect = async (ccuid: any) => {
   const { data: res } = await DeselectionsApi(ccuid)
   if (res.code === 200) {
     ElMessage.success('退选成功')
     await GetCourseList()
   }
-}
+}*/
 </script>
 
 <style scoped lang="less"></style>

@@ -78,7 +78,6 @@ const onSubmit = async () => {
       message: '提交成功',
       type: 'success'
     })
-    router.push({ path: '/student/school/applying' })
   } else {
     ElMessage({
       showClose: true,

@@ -121,8 +121,9 @@ const showDialog = (row: any) => {
   console.log(exemptionForm)
 }
 
-// 文件上传
-const uploadUrl = apis.development + '/stu/free-proof'
+//
+const baseURL = process.env.NODE_ENV === 'production' ? apis.production : apis.development
+const uploadUrl = baseURL + '/stu/free-proof'
 const headers = {
   token: getToken('token')
 }

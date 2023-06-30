@@ -87,7 +87,8 @@ const options = [
 ]
 
 // 文件上传
-const uploadUrl = apis.development + '/stu/secondScore-proof'
+const baseURL = process.env.NODE_ENV === 'production' ? apis.production : apis.development
+const uploadUrl = baseURL + '/stu/secondScore-proof'
 const headers = {
   token: getToken('token')
 }

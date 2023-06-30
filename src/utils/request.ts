@@ -4,8 +4,8 @@ import { ElMessage } from 'element-plus'
 import router from '@/router'
 
 export const apis = {
-  production: 'http://121.41.51.145:8077/apis', // 线上 (生成环境)
-  development: 'http://localhost:8089/api', // 本地 (开发环境)
+  production: '10.101.176.58:8080/apis', // 线上 (生成环境)
+  development: 'http://10.101.176.58:8080', // 本地 (开发环境)
   accessHomeData: 'http://www.xmyxapp.com' // 其他api
 }
 
@@ -36,7 +36,7 @@ request.interceptors.response.use(
     if (data && data.token) {
       setToken('token', data.token)
     }
-    if (msg === 'NOT_LOGIN') {
+    if (msg === 'NOT_LOGIN' || msg === 'NOT_USE') {
       console.log(router)
       router.push({ path: '/login' }).then(() => {
         ElMessage({ message: '请重新登录', type: 'warning' })

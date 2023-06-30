@@ -19,7 +19,7 @@
           align="center"
         >
           <template #default="scope">
-            <el-tag v-if="scope.row.result === '通过'" effect="dark" type="success">通过</el-tag>
+            <el-tag v-if="scope.row.result === '已通过'" effect="dark" type="success">通过</el-tag>
             <el-tag v-else-if="scope.row.result === '未通过'" effect="dark" type="danger">未通过</el-tag>
             <el-tag v-else="scope.row.result === '审核中'" effect="dark" type="warning">审核中</el-tag>
           </template>
@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import { GetListApi } from '@/api/student/leave'
 import { TableTitle } from '@/interface/table'
+import { DayUtils } from '@/utils/DayUtils'
 const loading = ref(false)
 const tableTitle: TableTitle[] = [
   {
@@ -64,7 +65,9 @@ const GetList = async () => {
   loading.value = true
   const { data: res } = await GetListApi(1)
   if (res.code === 200) {
-    tableData.value = res.data
+    DayUtils.date = res.data
+    DayUtils.accurateToDay('date').accurateToDay('endtime').accurateToDay('starttime')
+    tableData.value = DayUtils.date
     loading.value = false
   }
 }

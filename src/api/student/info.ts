@@ -6,3 +6,10 @@ export const GetInfoApi = (identity: string) => {
     method: 'GET'
   })
 }
+
+export const GetHeadPicApi = (url: any) => {
+  return request({
+    url: `/getHeadPic/${url}`,
+    method: 'GET'
+  })
+}

@@ -16,11 +16,8 @@ export const UpdateApi = (data: any) => {
 // 查询请假信息
 export const GetLeaveList = (result: any) => {
   return request({
-    url: 'tea/leLeave',
-    method: 'POST',
-    data: {
-      resultTea: result
-    }
+    url: `/tea/leLeave/${result}`,
+    method: 'GET'
   })
 }
 

@@ -18,7 +18,7 @@
           align="center"
         >
           <template #default="scope">
-            <el-tag v-if="scope.row.result === '通过'" effect="dark" type="success">通过</el-tag>
+            <el-tag v-if="scope.row.result === '已通过'" effect="dark" type="success">通过</el-tag>
             <el-tag v-else-if="scope.row.result === '未通过'" effect="dark" type="danger">未通过</el-tag>
             <el-tag v-else="scope.row.result === '审核中'" effect="dark" type="warning">审核中</el-tag>
           </template>
@@ -66,7 +66,7 @@ const GetList = async () => {
   const { data: res } = await GetListApi(0)
   if (res.code === 200) {
     DayUtils.date = res.data
-    DayUtils.accurateToSeconds('date').accurateToSeconds('endtime').accurateToSeconds('starttime')
+    DayUtils.accurateToDay('date').accurateToDay('endtime').accurateToDay('starttime')
     tableData.value = DayUtils.date
     loading.value = false
   }

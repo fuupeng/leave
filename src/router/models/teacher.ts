@@ -44,14 +44,14 @@ const teacher: RouteRecordRaw = {
       path: '/teacher/course',
       redirect: '/teacher/course/list',
       meta: {
-        iconClass: 'icon-kecheng',
+        iconClass: '#icon-kecheng',
         name: '教师课程'
       },
       children: [
         {
           path: '/teacher/course/list',
           // todo
-          component: () => import('@/view/teacher/course/list.vue'),
+          component: () => import('@/view/teacher/course/List.vue'),
           meta: {
             name: '课程列表'
           }
@@ -59,7 +59,7 @@ const teacher: RouteRecordRaw = {
         {
           path: '/teacher/course/release',
           // todo
-          component: () => import('@/view/teacher/course/add.vue'),
+          component: () => import('@/view/teacher/course/Add.vue'),
           meta: {
             name: '课程发布'
           }

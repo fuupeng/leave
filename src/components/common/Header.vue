@@ -2,7 +2,7 @@
   <div class="header">
     <el-header>
       <div class="title">
-        <span>请假系统</span>
+        <span>智慧学干</span>
         <el-icon size="24px" @click="menuChange">
           <svg aria-hidden="true">
             <use :xlink:href="icon"></use>
@@ -15,8 +15,8 @@
             <template #title>
               <el-avatar
                 fit="cover"
-                src="ss"
-                error="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                :src="headPicUrl"
+                error="https://ts1.cn.mm.bing.net/th/id/R-C.c016e44e170798fe33e1ecb4391f99cc?rik=11mNnaVQe%2b6c8g&riu=http%3a%2f%2fpic.616pic.com%2fys_img%2f00%2f60%2f18%2fSrKJcQwvYd.jpg&ehk=2Vohy2ubAoqWjfx0uF5vREsyseJMSXvE6jJjv9NK%2bRw%3d&risl=&pid=ImgRaw&r=0"
               />
               &nbsp;&nbsp;&nbsp;&nbsp;
               {{ name }}
@@ -31,19 +31,26 @@
     <el-dialog v-model="centerDialogVisible" title="头像修改" width="30%" center>
       <div style="text-align: center">
         <el-upload
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          ref="uploadRef"
+          :action="picUrl"
           :show-file-list="false"
+          :auto-upload="false"
+          :limit="1"
+          :on-change="handleFileChange"
+          name="headPic"
+          method="PUT"
+          :headers="headers"
           :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
         >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <img style="height: 50px; width: 50px" v-if="imageUrl" :src="imageUrl" class="avatar" />
+
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="centerDialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
+          <el-button @click="centerDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="apply()">确定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -53,12 +60,17 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { removeToken } from '@/utils/setToken'
-import { GetInfoApi } from '@/api/student/info'
+import { getToken, removeToken } from '@/utils/setToken'
+import { GetHeadPicApi, GetInfoApi } from '@/api/student/info'
+import { apis } from '@/utils/request'
+import { UploadFile, UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 let store = useStore()
 let icon = ref()
 icon.value = '#icon-fold'
+
+// 头像地址
+const headPicUrl = ref()
 const menuChange = () => {
   store.commit('changeShrink')
   if (store.state.shrink) {
@@ -73,24 +85,61 @@ const logout = () => {
 
 const name = ref()
 const identity = localStorage.getItem('identity')
+const baseUrl = process.env.NODE_ENV === 'production' ? apis.production : apis.development
+let picUrl
 const GetInfo = async () => {
   const identity = localStorage.getItem('identity')
+  let url = ''
   if (identity === 'student') {
-    let { data: res } = await GetInfoApi('/stu')
-    name.value = res.data.uname
+    url = '/stu'
+    picUrl = baseUrl + '/stu/updateHeadPic'
   } else {
-    let { data: res } = await GetInfoApi('/tea/info')
-    name.value = res.data.tname
+    url = '/tea/info'
+    picUrl = baseUrl + '/tea/updateHeadPic'
   }
+  console.log(url)
+  let { data: res } = await GetInfoApi(url)
+  localStorage.setItem('info', JSON.stringify(res.data))
+  name.value = res.data.uname || res.data.tname
+  const { data: res1 } = await GetHeadPicApi(res.data.headPic)
+  headPicUrl.value = 'http://' + res1.data
 }
 GetInfo()
 
 // 修改头像
+const headers = {
+  token: getToken('token')
+}
 const centerDialogVisible = ref(false)
+const uploadRef = ref<UploadInstance>()
 const clickCenter = () => {
   centerDialogVisible.value = true
 }
-const imageUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+const apply = () => {
+  uploadRef.value!.submit()
+}
+const imageData = ref<string | null>(null) // 存储图片的Base64编码
+const imageUrl = computed(() => {
+  return imageData.value ? `data:image/jpeg;base64,${imageData.value}` : null
+})
+function handleFileChange(uploadFile: UploadFile) {
+  if (uploadFile) {
+    const raw: any = uploadFile.raw
+    let blob = new Blob([raw], { type: 'audio/wav' })
+    const reader = new FileReader()
+    reader.onload = () => {
+      imageData.value = (reader.result as string).split(',')[1] // 提取Base64编码的部分
+    }
+    reader.readAsDataURL(blob)
+  }
+}
+const handleAvatarSuccess: UploadProps['onSuccess'] = async (response) => {
+  if (response.code === 200) {
+    await GetInfo()
+    ElMessage.success('更新成功')
+    centerDialogVisible.value = false
+  }
+}
 </script>
 <style lang="less" scoped>
 .header {

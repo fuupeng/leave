@@ -18,7 +18,7 @@
           align="center"
         >
           <template #default="scope">
-            <el-tag v-if="scope.row.result === '通过'" effect="dark" type="success">通过</el-tag>
+            <el-tag v-if="scope.row.result === '已通过'" effect="dark" type="success">通过</el-tag>
             <el-tag v-else-if="scope.row.result === '未通过'" effect="dark" type="danger">未通过</el-tag>
             <el-tag v-else="scope.row.result === '审核中'" effect="dark" type="warning">审核中</el-tag>
           </template>
@@ -87,7 +87,7 @@ const GetList = async () => {
 GetList()
 
 const agree = async (lid: any) => {
-  const { data: res } = await update(lid, '通过')
+  const { data: res } = await update(lid, '已通过')
   if ((res.code = 200)) {
     await GetList()
     ElMessage.success('操作成功！')

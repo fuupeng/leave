@@ -10,7 +10,7 @@ export const GetInterfaceApi = () => {
 export const LeavingSchoolApi = (data: any) => {
   return request({
     url: 'stu',
-    method: 'PUT',
+    method: 'POST',
     data
   })
 }

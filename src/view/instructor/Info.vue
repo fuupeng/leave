@@ -41,6 +41,7 @@
 <script lang="ts" setup>
 import { reactive } from 'vue'
 import { GetInfoApi, UpdateApi } from '@/api/teacher/info'
+import { UpdateInfoApi } from '@/api/public/info'
 
 const info = ref({
   tname: '',
@@ -61,8 +62,8 @@ const GetInfo = async () => {
 }
 GetInfo()
 const onSubmit = async () => {
-  const { data: res } = await UpdateApi(info.value)
-  console.log(res)
+  info.value.uname = info.value.tname
+  const { data: res } = await UpdateInfoApi(info.value, 1)
   if (res.code === 200) {
     ElMessage.success('更新成功！')
   }

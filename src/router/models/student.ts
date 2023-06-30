@@ -125,13 +125,13 @@ const student: RouteRecordRaw = {
             name: '教室申请'
           }
         },
-        {
+        /* {
           path: '/student/classroom/applying',
           component: () => import('@/view/student/classroom/Applying.vue'),
           meta: {
             name: '申请中'
           }
-        },
+        },*/
         {
           path: '/student/classroom/history',
           component: () => import('@/view/student/classroom/History.vue'),
